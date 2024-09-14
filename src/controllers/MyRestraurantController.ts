@@ -8,7 +8,7 @@ const uploadImage = async (file: Express.Multer.File) => {
     const image = file;
     const base64Image = Buffer.from(image.buffer).toString("base64");
     const dataURI = `data:${image.mimetype};base64,${base64Image}`;
-  
+  // converting binary image into string . Creating a base 64 image string
     const uploadResponse = await cloudinary.v2.uploader.upload(dataURI);
     return uploadResponse.url;
 };
@@ -25,7 +25,7 @@ const getMyRestaurant = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error fetching restaurant" });
   }
 };
-
+// 1.
 const createMyRestaurant = async (req: Request, res: Response) => {
   try {
     const existingRestaurant = await Restaurant.findOne({ user: req.userId });
@@ -49,7 +49,7 @@ const createMyRestaurant = async (req: Request, res: Response) => {
     console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
-};
+}; 
 
 const updateMyRestaurant = async (req: Request, res: Response) => {
   try {

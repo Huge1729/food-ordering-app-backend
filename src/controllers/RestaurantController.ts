@@ -20,14 +20,15 @@ const getRestaurant = async (req: Request, res: Response) => {
 const searchRestaurant = async (req: Request, res: Response) => {
   try {
     const city = req.params.city;
-
+    // Filtering
     const searchQuery = (req.query.searchQuery as string) || "";
-    const selectedCuisines = (req.query.selectedCuisines as string) || "";
+    const selectedCuisines = (req.query.selectedCuisines as string) || ""; // Backend it would be comma seperated string
     const sortOption = (req.query.sortOption as string) || "lastUpdated";
     const page = parseInt(req.query.page as string) || 1;
 
     let query: any = {};
-
+    // any query types
+    // london = London
     query["city"] = new RegExp(city, "i");
     const cityCheck = await Restaurant.countDocuments(query);
     if (cityCheck === 0) {
@@ -40,7 +41,8 @@ const searchRestaurant = async (req: Request, res: Response) => {
         },
       });
     }
-
+// URL = selectedCuisnes = italian,burger,chinese
+// [italian, burger, chinese]
     if (selectedCuisines) {
       const cuisinesArray = selectedCuisines
         .split(",")
@@ -50,6 +52,9 @@ const searchRestaurant = async (req: Request, res: Response) => {
     }
 
     if (searchQuery) {
+      // restuarantName = Pizza Palace
+      // cuisines = [Pizza , pasta , italian]
+      // searchQuery = pasta
       const searchRegex = new RegExp(searchQuery, "i");
       query["$or"] = [
         { restaurantName: searchRegex },
@@ -59,13 +64,13 @@ const searchRestaurant = async (req: Request, res: Response) => {
 
     const pageSize = 10;
     const skip = (page - 1) * pageSize;
-
+// Fronted say page 2---->skip = skip first 10 result
     // sortOption = "lastUpdated"
     const restaurants = await Restaurant.find(query)
       .sort({ [sortOption]: 1 })
       .skip(skip)
       .limit(pageSize)
-      .lean();
+      .lean(); 
 
     const total = await Restaurant.countDocuments(query);
 

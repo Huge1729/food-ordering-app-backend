@@ -21,11 +21,12 @@ const getMyOrders = async (req: Request, res: Response) => {
 };
 
 type CheckoutSessionRequest = {
+  // this is what req boly look like and fronted will send to
   cartItems: {
     menuItemId: string;
     name: string;
     quantity: string;
-  }[];
+  }[];  //this syntsx means req body having cartitem like object in array format
   deliveryDetails: {
     email: string;
     name: string;
@@ -86,11 +87,11 @@ const createCheckoutSession = async (req: Request, res: Response) => {
       cartItems: checkoutSessionRequest.cartItems,
       createdAt: new Date(),
     });
-
+    // line item for displaying content on stripe form ---array
     const lineItems = createLineItems(
       checkoutSessionRequest,
       restaurant.menuItems
-    );
+    ); // we have data to send 
 
     const session = await createSession(
       lineItems,
@@ -115,6 +116,7 @@ const createLineItems = (
   checkoutSessionRequest: CheckoutSessionRequest,
   menuItems: MenuItemType[]
 ) => {
+  // Foreach cartitem get the menu Item onject form the restrauart (backend) for security as we want price
   const lineItems = checkoutSessionRequest.cartItems.map((cartItem) => {
     const menuItem = menuItems.find(
       (item) => item._id.toString() === cartItem.menuItemId.toString()
@@ -123,7 +125,8 @@ const createLineItems = (
     if (!menuItem) {
       throw new Error(`Menu item not found: ${cartItem.menuItemId}`);
     }
-
+   // convert into stripe line item
+  //  comes from Stripe SDK
     const line_item: Stripe.Checkout.SessionCreateParams.LineItem = {
       price_data: {
         currency: "INR",
@@ -134,7 +137,7 @@ const createLineItems = (
       },
       quantity: parseInt(cartItem.quantity),
     };
-
+  // return the item araay
     return line_item;
   });
 

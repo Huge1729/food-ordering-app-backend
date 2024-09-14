@@ -14,8 +14,10 @@ router.get(
   RestaurantController.getRestaurant
 );
 
+// api/restuarants/sesrch/delhi
 router.get(
   "/search/:city",
+  // this is also a validation
   param("city")
     .isString()
     .trim()

@@ -29,7 +29,7 @@ router.patch(
 );
 
 router.get("/", jwtCheck, jwtParse, MyRestaurantController.getMyRestaurant);
-
+// 1. 
 router.post(
   "/",
   upload.single("imageFile"),

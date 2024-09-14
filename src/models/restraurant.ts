@@ -1,6 +1,7 @@
 import mongoose, { InferSchemaType } from "mongoose";
 
 const menuItemSchema = new mongoose.Schema({
+  // we are creating the other schema because we need menuitem id for the checkouts
   _id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -11,16 +12,16 @@ const menuItemSchema = new mongoose.Schema({
 });
 
 export type MenuItemType = InferSchemaType<typeof menuItemSchema>;
-
+ 
 const restaurantSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // refernce to user schema
   restaurantName: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
   deliveryPrice: { type: Number, required: true },
   estimatedDeliveryTime: { type: Number, required: true },
   cuisines: [{ type: String, required: true }],
-  menuItems: [menuItemSchema],
+  menuItems: [menuItemSchema],  // type of menuitem sch ema
   imageUrl: { type: String, required: true },
   lastUpdated: { type: Date, required: true },
 });

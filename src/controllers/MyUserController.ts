@@ -14,8 +14,11 @@ const getCurrentUser = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
-
+/// 1 step
 const createCurrentUser = async (req: Request, res: Response) => {
+  // 1. Check if user exist
+  // 2. create the user if it doesnt exist
+  // 3. return the user object to the calling client
   try {
     const { auth0Id } = req.body;
     const existingUser = await User.findOne({ auth0Id });
@@ -26,6 +29,7 @@ const createCurrentUser = async (req: Request, res: Response) => {
 
     const newUser = new User(req.body);
     await newUser.save();
+    // this will save in db
 
     res.status(201).json(newUser.toObject());
   } catch (error) {
@@ -38,6 +42,7 @@ const updateCurrentUser = async (req: Request, res: Response) => {
   try {
     const { name, addressLine1, country, city } = req.body;
     const user = await User.findById(req.userId);
+    // req.userId aaya haii jwtparse se before calling this go to jwt
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -48,9 +53,9 @@ const updateCurrentUser = async (req: Request, res: Response) => {
     user.city = city;
     user.country = country;
 
-    await user.save();
+    await user.save();  // save into database
 
-    res.send(user);
+    res.send(user);   // send back to fronted
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error updating user" });

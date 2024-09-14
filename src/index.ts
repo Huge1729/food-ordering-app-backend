@@ -19,8 +19,7 @@ cloudinary.config({
 });
 
 const app = express();
-
-app.use(cors());
+ 
 
 app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
 
@@ -30,6 +29,8 @@ app.get("/health", async (req: Request, res: Response) => {
   res.send({ message: "health OK!" });
 });
 
+
+// /api/my/user this will run
 app.use("/api/my/user", myUserRoute);
 app.use("/api/my/restaurant", myRestaurantRoute);
 app.use("/api/restaurant", restaurantRoute);
