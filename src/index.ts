@@ -8,6 +8,7 @@ import myRestaurantRoute from "./routes/MyRestaurantRoute";
 import restaurantRoute from "./routes/RestaurantRoute";
 import orderRoute from "./routes/OrderRoute";
 
+
 mongoose
   .connect(process.env.MONGODB_CONNECTION_STRING as string)
   .then(() => console.log("Connected to database!"));
@@ -19,7 +20,7 @@ cloudinary.config({
 });
 
 const app = express();
- 
+app.use(cors());
 
 app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
 
